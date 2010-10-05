@@ -41,7 +41,8 @@ class ModelGrid(object):
         self.fields = []        # holds the extjs fields
         self.base_fields = []   # holds the base model fields
         
-        model_fields = self.model._meta._fields()
+        #model_fields = self.model._meta._fields()
+        model_fields = self.model._meta.fields
         excludes = getattr(self.Meta, 'exclude', [])
         # reorder cols if needed
         order = getattr(self.Meta, 'order', None)
@@ -64,13 +65,17 @@ class ModelGrid(object):
             if field.__class__.__name__ == VirtualField:
                 self.fields.append(self.Meta.fields_conf[field.name])
                 continue
-            fdict = {'name':field.name, 'header': field.name}
+            #fdict = {'name':field.name, 'header': field.name}
+            fdict = {'name': field.name, 'header': field.verbose_name, 'tooltip': field.help_text }
             
-            if getattr(field, 'verbose_name', None) and field.verbose_name != field.name:
-                fdict['tooltip'] = u'%s' %  field.verbose_name
+#            if getattr(field, 'verbose_name', None) and field.verbose_name != field.name:
+#                fdict['tooltip'] = u'%s' %  field.verbose_name
             
-            if field.name == 'id':
-                fdict['id']='id'
+            #if field.name == 'id':
+            #    fdict['id']='id'
+            if field.primary_key:
+                fdict['id'] = field.name
+
             if  field.__class__.__name__ == 'DateTimeField':
                 fdict['type'] = 'datetime'
                 fdict['xtype'] = 'datecolumn' 
