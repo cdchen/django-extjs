@@ -123,11 +123,13 @@ class ModelGrid(object):
             if f.get('name') == name:
                 return f
         return None
+    
     def get_base_field(self, name):  
         for f in self.base_fields:
             if f.name == name:
                 return f
         return None
+    
     def get_fields(self, colModel):  
         """ return this grid field list
             . can include hidden fields
